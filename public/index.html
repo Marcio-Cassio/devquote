@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DevQuote</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card: #1e293b;
+      --text: #f1f5f9;
+      --muted: #94a3b8;
+      --accent: #38bdf8;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+        Helvetica, Arial, sans-serif;
+      background: radial-gradient(circle at top, #1e293b, var(--bg));
+      color: var(--text);
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid rgba(148, 163, 184, 0.15);
+      border-radius: 16px;
+      padding: 2.5rem;
+      max-width: 540px;
+      width: 100%;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+      text-align: center;
+    }
+
+    .label {
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.25rem;
+    }
+
+    .quote {
+      font-size: 1.4rem;
+      line-height: 1.5;
+      min-height: 4.5rem;
+      margin-bottom: 2rem;
+      transition: opacity 0.2s ease;
+    }
+
+    button {
+      font: inherit;
+      font-weight: 600;
+      color: var(--bg);
+      background: var(--accent);
+      border: none;
+      border-radius: 8px;
+      padding: 0.75rem 1.5rem;
+      cursor: pointer;
+      transition: transform 0.1s ease, background 0.2s ease;
+    }
+
+    button:hover { background: #7dd3fc; }
+    button:active { transform: scale(0.97); }
+
+    footer {
+      margin-top: 1.5rem;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+  <main class="card">
+    <div class="label">DevQuote</div>
+    <p class="quote" id="quote">Loading…</p>
+    <button id="newQuote">New quote</button>
+    <footer>A tiny containerized quote service</footer>
+  </main>
+
+  <script>
+    const quoteEl = document.getElementById("quote");
+    const button = document.getElementById("newQuote");
+
+    async function loadQuote() {
+      quoteEl.style.opacity = "0.4";
+      try {
+        const res = await fetch("/api/quote");
+        const data = await res.json();
+        quoteEl.textContent = data.quote;
+      } catch (err) {
+        quoteEl.textContent = "Couldn't load a quote. Is the server running?";
+      } finally {
+        quoteEl.style.opacity = "1";
+      }
+    }
+
+    button.addEventListener("click", loadQuote);
+    loadQuote();
+  </script>
+</body>
+</html>
