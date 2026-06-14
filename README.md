@@ -4,6 +4,8 @@ A minimal Node.js + Express web service that serves random programming and
 DevOps quotes. No build step, no database — a single static frontend and a
 tiny JSON API, packaged to run in a Docker container.
 
+**Live:** <https://devquote.onrender.com>
+
 ## Features
 
 - `GET /` — a clean single-page UI showing a random quote with a "New quote" button
@@ -47,3 +49,10 @@ npm start
 ```
 
 Then open <http://localhost:3000>.
+
+## Deployment
+
+Continuously deployed. Every push to `main` runs a GitHub Actions workflow that
+builds the Docker image, pushes it to Docker Hub (`marciocassio/devquote:latest`),
+then hits a Render deploy hook so Render pulls and redeploys the new image
+automatically.
